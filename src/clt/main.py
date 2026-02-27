@@ -3,7 +3,6 @@ import argparse
 import os
 
 #Declaration of global variables and constants
-
 security = "locked"
 password = ""
 command-menu = "" #Type in list of commands.
@@ -20,6 +19,19 @@ def open_file():
 #Define a function to setup a password.
 def set_up():
     global password
+
+    r_password = ""
+
+    print("Input Password: ")
+    password = input()
+
+    print("Confirm Password.")
+    r_password = input()
+
+    if password == r_password:
+        pass
+    else:
+        print("Passwords do not match. Try again.")
 
 
 #Define a function to authenticate a password.
@@ -40,17 +52,17 @@ def decrypt():
 
 def main():
     # Creates a folder to store all files, makes one if it doesn't exit yet.
-    os.makedirs(r"~\NOTEBOOK\", exist_ok=True") #most likely wrong usage
+    os.makedirs(r"~\NOTEBOOK, mode=0o777, exist_ok=True") #most likely wrong usage
     #Parses user inputs into executable commands for the program.
     parser = argparse.ArgumentParser(prog="NOTES")
 
-    parser.add_argument("--quit", action="store_true")
-    parser.add_argument("--new", help="Creates a new encrypted file.")
-    parser.add_argument("--open", help="Decrypts and opens file.")
-    parser.add_argument("--login", help="Authenticates user.")
-    parser.add_argument("--setup", help="Sets up new password (Can only be done once.)")
-    parser.add_argument("--delete", help="Deletes specified file.")
-    parser.add_argument("--help", action="help")
+    group = parser.add_mutually_exclusive_group(required=True)
+
+    group.add_argument("--new", metavar="FILE", help="Creates a new encrypted file.")
+    group.add_argument("--open", metavar="FILE", help="Decrypts and opens file.")
+    group.add_argument("--login", metaver="USER", help="Authenticates user.")
+    group.add_argument("--setup", action="store_true", help="Sets up new password")
+    group.add_argument("--delete", metaver="FILE", help="Deletes specified file.")
 
     args = parser.parse_args()
 
