@@ -18,5 +18,5 @@ If you forget your password, womp womp.
 
 Anyone can delete any text file. That's just how it goes.
 
-
+## AUTHORS
 By: Tyrone Sarmiento, Joab Rain Laminta, Reece Lao
