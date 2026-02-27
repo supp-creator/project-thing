@@ -6,6 +6,8 @@ import os
 
 security = "locked"
 password = ""
+command-menu = "" #Type in list of commands.
+
 
 
 #Function Definitions
@@ -38,7 +40,7 @@ def decrypt():
 
 def main():
     # Creates a folder to store all files, makes one if it doesn't exit yet.
-    os.makedirs("NOTEBOOK", exist_ok=True)
+    os.makedirs(r"~\NOTEBOOK\", exist_ok=True") #most likely wrong usage
     #Parses user inputs into executable commands for the program.
     parser = argparse.ArgumentParser(prog="NOTES")
 
@@ -60,12 +62,14 @@ def main():
         login(args.login)
     elif args.open:
         if security == "locked":
-            print("Please login before to decrypt file.")
+            print("Please login to decrypt file.")
         else:
             decrypt(args.open)
             open_file(args.open)
     elif args.delete:
         delete_file(args.delete)
+    else:
+        print(comand-menu)
 
 if __name__== "__main__":
     main()
