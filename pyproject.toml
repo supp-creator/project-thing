@@ -4,4 +4,4 @@ version = "0.1.0"
 description = "LBYCPA1 Final Project: password protected note-taking ctl."
 readme = "README.md"
 requires-python = "3.14.3"
-dependencies = [ "cryptography >= 46.0.5" ]
+dependencies = [ "cryptography >= 46.0.5", "argparse >=1.4.0" ]
