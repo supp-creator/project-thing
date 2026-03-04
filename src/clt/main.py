@@ -1,18 +1,23 @@
-from cryptography.fernet import Fernet
 import argparse
+import base64
 import os
+import cryptography
 
 #Declaration of global variables and constants
 security = "locked"
 password = ""
 command-menu = "" #Type in list of commands.
-key = Fernet.generate_key()
+file = ""
+salt =
+
 
 
 #Function Definitions
 #Define a function to create a file if it doesn't exist. Or open it, if it does.
 def create_file():
     with open("NOTEBOOK/{}.txt".format(args.new), "w")
+
+    salt = os.random(16)
 
 #Define a function to open a specific file.
 def open_file():
@@ -34,9 +39,18 @@ def set_up():
     else:
         print("Passwords do not match. Try again.")
 
+def derive_key(password: str, salt: bytes):
+    kdf = PBKDF2HMAC(
+            algorithm = hashes.SHA256(),
+            lengh = 32,
+            salt = salt,
+            iterations = 100_100,
+            backen d= default_backend()
+            )
+    key = base64.urlsafe_b64encode(kdf.derive(password.encode()))
 
 #Define a function to authenticate a password.
-def password():
+def login():
     global security
 
 
@@ -58,7 +72,11 @@ def decrypt():
     with open(file, "rb") as f:
         encrypted = f.read()
 
+    
     decrypted = fernet.decrypt(encrypted)
+
+    key = derive_key(password, salt)
+
 
     print(decrypted.decode(), end="")
 
@@ -67,16 +85,18 @@ def decrypt():
 def main():
     # Creates a folder to store all files, makes one if it doesn't exit yet.
     os.makedirs("~\NOTEBOOK, mode=0o777, exist_ok=True") 
+
     #Parses user inputs into executable commands for the program.
+
     parser = argparse.ArgumentParser(prog="NOTES")
 
     group = parser.add_mutually_exclusive_group(required=True)
 
-    group.add_argument("--new", metavar="FILE", help="Creates a new encrypted file.")
-    group.add_argument("--open", metavar="FILE", help="Decrypts and opens file.")
-    group.add_argument("--login", metaver="USER", help="Authenticates user.")
-    group.add_argument("--setup", action="store_true", help="Sets up new password")
-    group.add_argument("--delete", metaver="FILE", help="Deletes specified file.")
+    group.add_argument("--new")
+    group.add_argument("--open")
+    group.add_argument("--login")
+    group.add_argument("--setup")
+    group.add_argument("--delete")
 
     args = parser.parse_args()
 
