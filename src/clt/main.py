@@ -1,26 +1,22 @@
 import argparse
 import base64
-import os
+from os import urandom
 import cryptography
+from pathlib import Path
 
 #Declaration of global variables and constants
-security = "locked"
 password = ""
 command-menu = "" #Type in list of commands.
-file = ""
-salt =
-
-
+salt = urandom(16)
+folder = Path("NOTEBOOK")
 
 #Function Definitions
 #Define a function to create a file if it doesn't exist. Or open it, if it does.
-def create_file():
-    with open("NOTEBOOK/{}.txt".format(args.new), "w")
-
-    salt = os.random(16)
-
-#Define a function to open a specific file.
 def open_file():
+    with open(f"NOTEBOOK/{file_name}.txt", "r") as f:
+        contents = f.read()
+        print(contents)
+
 
 #Define a function to setup a password.
 def set_up():
@@ -54,8 +50,25 @@ def login():
     global security
 
 
+#Define a function that can add a string to a file.
+def write2():
+    try:
+        with open(f"folder/{file_name}.txt", "r+") as f:
+            contents = f.read()
+            print(contents)
+            print(r"Add something. (If you want a new line, append \n at the end)")
+            add_this = input()
+            f.write(add_this)
+        except FileNotFound:
+            print("File doesn't exist???")
+
 #Define a function to delete a specific file.
 def delete():
+    delete_this_file = Path(folder/{args.delete})
+    try:
+        os.remove(delete_this_file)
+    except FIleNotFoundError:
+        print("File does not exist O_O")
 
 #Define a function to encrypt a specific file.
 def encrypt():
@@ -84,34 +97,36 @@ def decrypt():
 
 def main():
     # Creates a folder to store all files, makes one if it doesn't exit yet.
-    os.makedirs("~\NOTEBOOK, mode=0o777, exist_ok=True") 
+    folder.mkdir(exist_ok=True)
 
     #Parses user inputs into executable commands for the program.
-
     parser = argparse.ArgumentParser(prog="NOTES")
 
     group = parser.add_mutually_exclusive_group(required=True)
 
-    group.add_argument("--new")
-    group.add_argument("--open")
+    group.add_argument("--new", required=True)
+    group.add_argument("--open", required=True)
     group.add_argument("--login")
     group.add_argument("--setup")
-    group.add_argument("--delete")
+    group.add_argument("--write", required=True)
+    group.add_argument("--delete", required=True)
 
     args = parser.parse_args()
 
     #Decision Tree
     if args.new:
-        create_file(args.new)
+        file_name = args.new
+        open_file(file_name)
         encrypt(args.new)
     elif args.login:
         login(args.login)
+    elif args.write:
+        file_name = args.write
+        write2(file_name)
     elif args.open:
-        if security == "locked":
-            print("Please login to decrypt file.")
-        else:
-            decrypt(args.open)
-            open_file(args.open)
+        file_name = args.open
+        decrypt(file_name)
+        open_file(file_name)
     elif args.delete:
         delete_file(args.delete)
     else:
