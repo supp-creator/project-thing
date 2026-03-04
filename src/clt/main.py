@@ -1,4 +1,4 @@
-import cryptography
+from cryptography.fernet import Fernet
 import argparse
 import os
 
@@ -6,12 +6,13 @@ import os
 security = "locked"
 password = ""
 command-menu = "" #Type in list of commands.
-
+key = Fernet.generate_key()
 
 
 #Function Definitions
 #Define a function to create a file if it doesn't exist. Or open it, if it does.
 def create_file():
+    with open("NOTEBOOK/{}.txt".format(args.new), "w")
 
 #Define a function to open a specific file.
 def open_file():
@@ -44,15 +45,28 @@ def delete():
 
 #Define a function to encrypt a specific file.
 def encrypt():
+    with open(file, "rb") as f:
+        data = f.read()
+
+    encrypted = fernet.encrypt(data)
+
+    with open(file, "wb") as f:
+        f.write(encrypted)
 
 #Define a function to decrypt a specific file.
 def decrypt():
+    with open(file, "rb") as f:
+        encrypted = f.read()
+
+    decrypted = fernet.decrypt(encrypted)
+
+    print(decrypted.decode(), end="")
 
 
 
 def main():
     # Creates a folder to store all files, makes one if it doesn't exit yet.
-    os.makedirs(r"~\NOTEBOOK, mode=0o777, exist_ok=True") #most likely wrong usage
+    os.makedirs("~\NOTEBOOK, mode=0o777, exist_ok=True") 
     #Parses user inputs into executable commands for the program.
     parser = argparse.ArgumentParser(prog="NOTES")
 
