@@ -5,7 +5,6 @@ import cryptography
 from pathlib import Path
 
 #Declaration of global variables and constants
-password = ""
 command-menu = "" #Type in list of commands.
 salt = urandom(16)
 folder = Path("NOTEBOOK")
@@ -13,10 +12,12 @@ folder = Path("NOTEBOOK")
 #Function Definitions
 #Define a function to create a file if it doesn't exist. Or open it, if it does.
 def open_file():
-    with open(f"NOTEBOOK/{file_name}.txt", "r") as f:
-        contents = f.read()
-        print(contents)
-
+    try:
+        with open(f"NOTEBOOK/{file_name}.txt", "r") as f:
+            contents = f.read()
+            print(contents)
+    except FileNotFoundError:
+        print("File does not exits O_O")
 
 #Define a function to setup a password.
 def set_up():
@@ -45,21 +46,17 @@ def derive_key(password: str, salt: bytes):
             )
     key = base64.urlsafe_b64encode(kdf.derive(password.encode()))
 
-#Define a function to authenticate a password.
-def login():
-    global security
-
 
 #Define a function that can add a string to a file.
 def write2():
     try:
-        with open(f"folder/{file_name}.txt", "r+") as f:
+        with open(f"folder/{file_name}.txt", "rw") as f:
             contents = f.read()
             print(contents)
             print(r"Add something. (If you want a new line, append \n at the end)")
             add_this = input()
             f.write(add_this)
-        except FileNotFound:
+        except FileNotFoundError:
             print("File doesn't exist???")
 
 #Define a function to delete a specific file.
@@ -67,12 +64,13 @@ def delete():
     delete_this_file = Path(folder/{args.delete})
     try:
         os.remove(delete_this_file)
-    except FIleNotFoundError:
+    except FileNotFoundError:
         print("File does not exist O_O")
 
 #Define a function to encrypt a specific file.
 def encrypt():
-    with open(file, "rb") as f:
+    data = ""
+    with open(f"folder/{file_name}.txt", "rb") as f:
         data = f.read()
 
     encrypted = fernet.encrypt(data)
