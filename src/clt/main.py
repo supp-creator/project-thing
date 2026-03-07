@@ -104,8 +104,6 @@ def main():
 
     group.add_argument("--new", required=True)
     group.add_argument("--open", required=True)
-    group.add_argument("--login")
-    group.add_argument("--setup")
     group.add_argument("--write", required=True)
     group.add_argument("--delete", required=True)
 
@@ -116,8 +114,6 @@ def main():
         file_name = args.new
         open_file(file_name)
         encrypt(args.new)
-    elif args.login:
-        login(args.login)
     elif args.write:
         file_name = args.write
         write2(file_name)
