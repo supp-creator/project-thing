@@ -1,16 +1,20 @@
 import argparse
 import base64
-from os import urandom
 import cryptography
+import os
 from pathlib import Path
 
 #Declaration of global variables and constants
 command-menu = "" #Type in list of commands.
-salt = urandom(16)
 folder = Path("NOTEBOOK")
 
-#Function Definitions
-#Define a function to create a file if it doesn't exist. Or open it, if it does.
+##########################################
+#Function Definitions                    #
+##########################################
+
+def new_file():
+
+
 def open_file():
     try:
         with open(f"NOTEBOOK/{file_name}.txt", "r") as f:
@@ -18,23 +22,6 @@ def open_file():
             print(contents)
     except FileNotFoundError:
         print("File does not exits O_O")
-
-#Define a function to setup a password.
-def set_up():
-    global password
-
-    r_password = ""
-
-    print("Input Password: ")
-    password = input()
-
-    print("Confirm Password.")
-    r_password = input()
-
-    if password == r_password:
-        pass
-    else:
-        print("Passwords do not match. Try again.")
 
 def derive_key(password: str, salt: bytes):
     kdf = PBKDF2HMAC(
@@ -80,17 +67,6 @@ def encrypt():
 
 #Define a function to decrypt a specific file.
 def decrypt():
-    with open(file, "rb") as f:
-        encrypted = f.read()
-
-    
-    decrypted = fernet.decrypt(encrypted)
-
-    key = derive_key(password, salt)
-
-
-    print(decrypted.decode(), end="")
-
 
 
 def main():
@@ -111,16 +87,13 @@ def main():
 
     #Decision Tree
     if args.new:
-        file_name = args.new
-        open_file(file_name)
+        new_file(args.new)
         encrypt(args.new)
     elif args.write:
-        file_name = args.write
-        write2(file_name)
+        write2(args.write)
     elif args.open:
-        file_name = args.open
-        decrypt(file_name)
-        open_file(file_name)
+        decrypt(args.open)
+        open_file(args.open)
     elif args.delete:
         delete_file(args.delete)
     else:
