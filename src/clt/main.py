@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 
 #Declaration of global variables
-command-menu = "" #Type in list of commands.
+command_menu = "" #Type in list of commands.
 folder = Path("NOTEBOOK")
 security = "locked"
 
@@ -20,16 +20,20 @@ def new_file():
 
 #Define a function to encrypt a specific file.
 #Needs overhaul
-def encrypt():
-    data = ""
-    with open(f"folder/{file_name}.txt", "rb") as f:
+def encrypt(file_name, password):
+    file_path = folder / f"{file_name}.txt"
+
+    salt = os.urandom(16)
+    key = derive_key(password, salt)
+    fernet = Fernet(key)
+
+    with open(file_path, "rb") as f:
         data = f.read()
 
     encrypted = fernet.encrypt(data)
 
     with open(file, "wb") as f:
-        f.write(encrypted)
-
+        f.write(salt + encrypted)
 
 
 def open_file():
@@ -43,18 +47,35 @@ def open_file():
 
 def derive_key(password: str, salt: bytes):
     kdf = PBKDF2HMAC(
-            algorithm = hashes.SHA256(),
-            lengh = 32,
-            salt = salt,
-            iterations = 600000,
-            )
+        algorithm = hashes.SHA256(),
+        lenght = 32,
+        salt = salt,
+        iterations = 600000,
+    )
     key = base64.urlsafe_b64encode(kdf.derive(password.encode()))
+    return key
 
 
 
 #Define a function to decrypt a specific file.
-def decrypt():
+def decrypt(file_name, password):
+    file_path = folder / f"{file_name}.txt"
 
+    with open(file_path, "rb") as f:
+        file_data = f.read()
+
+    salt = file_data[:16]
+    encrypted_data = file_data[16:]
+    key = derive_key(password, salt)
+    fernet = Fernet(key)
+
+    try:
+        decrypted = fernet.decrypt(encrypted_data)
+        return decrypted.decode()
+    
+    except:
+        print("Decryption Failed - Wrong Password!")
+        return None
 
 #Define a function that prompts user for password and decrypts the chosen file.
 #Function must use decrpyt() function
@@ -71,7 +92,7 @@ def write2():
     else:
         try:
             with open(f"folder/{file_name}.txt", "a") as f:
-                print(r"Add something. (If you want a new line, append a '\n' at the end"))
+                print(r"Add something. (If you want a new line, append a '\n' at the end")
                 add_this = input()
                 f.write(add_this)
         except FileNotFoundError:
