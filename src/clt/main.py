@@ -17,16 +17,18 @@ security = "locked"
 #Function to create a new file; must check if it exists first.
 def new_file(file_name):
     try:
-        with open(f"folder/{file_name}.txt", "x") as f:
+        with open(f"{folder}/{file_name}.txt", "x") as f:
             pass
-        print(f"File: {file_name}.txt has been successfully created.")
-
+        print(f"\nFile: {file_name}.txt has been successfully created.\n")
     except FileExistsError:
         print("File name already taken...Pick a new one...")
 
 #Define a function to encrypt a specific file.
-def encrypt(file_name, password):
-    file_path = folder / f"{file_name}.txt"
+def encrypt(file_name):
+
+    password = input()
+
+    file_path = folder/f"{file_name}.txt"
 
     salt = os.urandom(16)
     key = derive_key(password, salt)
@@ -59,8 +61,6 @@ def derive_key(password: str, salt: bytes):
     )
     key = base64.urlsafe_b64encode(kdf.derive(password.encode()))
     return key
-
-
 
 #Define a function to decrypt a specific file.
 def decrypt(file_name, password):
@@ -111,11 +111,11 @@ def write2(file_name):
 
 #Define a function to delete a specific file.
 def delete(file_name):
-    delete_this_file = Path(folder/file_name)
+    delete_this_file = Path(f"{folder}/{file_name}")
     try:
         os.remove(delete_this_file)
     except FileNotFoundError:
-        print("File does not exist O_O")
+        print("\nFile not found...\n")
 
 
 
@@ -138,6 +138,7 @@ def main():
     #Decision Tree
     if args.new:
         new_file(args.new)
+        print("Enter Password for this file:")
         encrypt(args.new)
     elif args.write:
         unlock(args.write)
@@ -149,6 +150,7 @@ def main():
         open_file(args.open)
     elif args.delete:
         delete(args.delete)
+        print("\nFile successfully deleted...\n")
     else:
         print(command_menu)
 
