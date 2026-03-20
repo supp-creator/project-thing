@@ -26,6 +26,7 @@ def new_file(file_name):
         print(f"\nFile: {file_name}.txt has been successfully created.\n")
     except FileExistsError:
         print("File name already taken...Pick a new one...")
+        return 0
 
 #Define a function to encrypt a specific file.
 def encrypt(file_name):
@@ -36,12 +37,12 @@ def encrypt(file_name):
     key = derive_key(password, salt)
     fernet = Fernet(key)
 
-    with open(f"{file_name}", "rb") as f:
+    with open(f"{file_name}.txt", "rb") as f:
         data = f.read()
 
     encrypted = fernet.encrypt(data)
 
-    with open(file_path, "wb") as f:
+    with open(f"{file_name}.txt", "wb") as f:
         f.write(salt + encrypted)
 
 
@@ -107,7 +108,7 @@ def write2(file_name):
 
                 print(r"Add something. (If you want a new line, append a '\n' at the end")
                 add_this = input()
-                f.write(add_this)
+                f.write(f"\n{add_this}")
         except FileNotFoundError:
             print(f"The file: {file_name} doesn't exist.")
 
@@ -148,6 +149,7 @@ def main():
         security = "unlocked"
         write2(args.write)
     elif args.open:
+        print("Enter Password:")
         unlock(args.open)
         open_file(args.open)
     elif args.delete:
