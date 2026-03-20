@@ -16,14 +16,12 @@ security = "locked"
 #Function to create a new file; must check if it exists first.
 def new_file(file_name):
     try:
-<<<<<<< HEAD
         with open(f"folder/{file_name}.txt", "x") as f:
             pass
         print("File: {file_name}.txt has been successfully created.")
+        
     except FileExistsError:
         print("File name already taken...Pick a new one...")
-
->>>>>>> 867378511647e75603d01b0a9f6a67cf9778e942
 
 #Define a function to encrypt a specific file.
 def encrypt(file_name, password):
