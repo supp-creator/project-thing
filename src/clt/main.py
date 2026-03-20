@@ -5,17 +5,16 @@ import os
 from pathlib import Path
 
 #Declaration of global variables
-command_menu = "" #Type in list of commands.
+command_menu = "testing..." #Type in list of commands.
 folder = Path("NOTEBOOK")
 security = "locked"
 
-#def
 ##########################################
 #Function Definitions
 ##########################################
 
 #Function to create a new file; must check if it exists first.
-def new_file():
+#def new_file():
 
 
 #Define a function to encrypt a specific file.
@@ -85,7 +84,6 @@ def unlock():
 
     decrypt()
 
-
 def write2():
     if security == "locked":
         print("Can't write to this file...Unlock first...")
@@ -99,8 +97,8 @@ def write2():
             print("File doesn't exist...Create it first...")
 
 #Define a function to delete a specific file.
-def delete():
-    delete_this_file = Path(folder/{args.delete})
+def delete(file):
+    delete_this_file = Path(folder/file)
     try:
         os.remove(delete_this_file)
     except FileNotFoundError:
@@ -117,10 +115,10 @@ def main():
 
     group = parser.add_mutually_exclusive_group(required=True)
 
-    group.add_argument("--new", required=True)
-    group.add_argument("--open", required=True)
-    group.add_argument("--write", required=True)
-    group.add_argument("--delete", required=True)
+    group.add_argument("--new")
+    group.add_argument("--open")
+    group.add_argument("--write")
+    group.add_argument("--delete")
 
     args = parser.parse_args()
 
@@ -136,7 +134,7 @@ def main():
         unlock(args.open)
         open_file(args.open)
     elif args.delete:
-        delete_file(args.delete)
+        delete(args.delete)
     else:
         print(comand-menu)
 
