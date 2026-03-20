@@ -16,27 +16,29 @@ security = "locked"
 #Function to create a new file; must check if it exists first.
 def new_file(file_name):
     try:
+<<<<<<< HEAD
         with open(f"folder/{file_name}.txt", "x") as f:
             pass
         print("File: {file_name}.txt has been successfully created.")
     except FileExistsError:
         print("File name already taken...Pick a new one...")
 
+>>>>>>> 867378511647e75603d01b0a9f6a67cf9778e942
+
 #Define a function to encrypt a specific file.
-#Needs overhaul
 def encrypt(file_name, password):
     file_path = folder / f"{file_name}.txt"
 
     salt = os.urandom(16)
     key = derive_key(password, salt)
-    fernet = Fernet(key)
+    fernet = fernet(key)
 
     with open(file_path, "rb") as f:
         data = f.read()
 
     encrypted = fernet.encrypt(data)
 
-    with open(file, "wb") as f:
+    with open(file_path, "wb") as f:
         f.write(salt + encrypted)
 
 
@@ -71,7 +73,7 @@ def decrypt(file_name, password):
     salt = file_data[:16]
     encrypted_data = file_data[16:]
     key = derive_key(password, salt)
-    fernet = Fernet(key)
+    fernet = fernet(key)
 
     try:
         decrypted = fernet.decrypt(encrypted_data)
@@ -83,11 +85,18 @@ def decrypt(file_name, password):
 
 #Define a function that prompts user for password and decrypts the chosen file.
 #Function must use decrpyt() function
-def unlock():
+def unlock(file_name):
     print("Enter Password...")
     passwd = input()
 
-    decrypt()
+    resultDecrypt = decrypt(file_name, passwd)
+    if resultDecrypt is not None:
+        global security
+        security = "unlocked"
+
+        return resultDecrypt
+    else:
+        return None
 
 def write2(file_name):
     if security == "locked":
@@ -107,7 +116,7 @@ def delete(file_name):
     try:
         os.remove(delete_this_file)
     except FileNotFoundError:
-        print("File not found...")
+        print("File does not exist O_O")
 
 
 
@@ -141,7 +150,7 @@ def main():
     elif args.delete:
         delete(args.delete)
     else:
-        print(comand-menu)
+        print(command_menu)
 
 if __name__== "__main__":
     main()
