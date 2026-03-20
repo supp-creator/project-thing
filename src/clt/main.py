@@ -3,6 +3,7 @@ import base64
 import cryptography
 import os
 from pathlib import Path
+from cryptography.fernet import Fernet
 
 #Declaration of global variables
 command_menu = "testing..." #Type in list of commands.
@@ -18,8 +19,8 @@ def new_file(file_name):
     try:
         with open(f"folder/{file_name}.txt", "x") as f:
             pass
-        print("File: {file_name}.txt has been successfully created.")
-        
+        print(f"File: {file_name}.txt has been successfully created.")
+
     except FileExistsError:
         print("File name already taken...Pick a new one...")
 
@@ -29,7 +30,7 @@ def encrypt(file_name, password):
 
     salt = os.urandom(16)
     key = derive_key(password, salt)
-    fernet = fernet(key)
+    fernet = Fernet(key)
 
     with open(file_path, "rb") as f:
         data = f.read()
@@ -52,7 +53,7 @@ def open_file(file_name):
 def derive_key(password: str, salt: bytes):
     kdf = PBKDF2HMAC(
         algorithm = hashes.SHA256(),
-        lenght = 32,
+        length = 32,
         salt = salt,
         iterations = 600000,
     )
@@ -71,7 +72,7 @@ def decrypt(file_name, password):
     salt = file_data[:16]
     encrypted_data = file_data[16:]
     key = derive_key(password, salt)
-    fernet = fernet(key)
+    fernet = Fernet(key)
 
     try:
         decrypted = fernet.decrypt(encrypted_data)
@@ -140,6 +141,7 @@ def main():
         encrypt(args.new)
     elif args.write:
         unlock(args.write)
+        global security
         security = "unlocked"
         write2(args.write)
     elif args.open:
