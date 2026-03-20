@@ -15,13 +15,10 @@ security = "locked"
 
 #Function to create a new file; must check if it exists first.
 def new_file(file_name):
-    try:
-        f = Path(f"folder/{file_name}")
-        f.touch()
-    except FileExists:
-        print("File already exists...")
+    f = Path(f"folder/{file_name}")
+    f.touch()
 
-
+    
 #Define a function to encrypt a specific file.
 #Needs overhaul
 def encrypt(file_name, password):
