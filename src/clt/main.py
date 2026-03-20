@@ -35,7 +35,7 @@ def encrypt(file_name, password):
         f.write(salt + encrypted)
 
 
-def open_file():
+def open_file(file_name):
     try:
         with open(f"NOTEBOOK/{file_name}.txt", "r") as f:
             contents = f.read()
@@ -84,7 +84,7 @@ def unlock():
 
     decrypt()
 
-def write2():
+def write2(file_name):
     if security == "locked":
         print("Can't write to this file...Unlock first...")
     else:
@@ -97,8 +97,8 @@ def write2():
             print("File doesn't exist...Create it first...")
 
 #Define a function to delete a specific file.
-def delete(file):
-    delete_this_file = Path(folder/file)
+def delete(file_name):
+    delete_this_file = Path(folder/file_name)
     try:
         os.remove(delete_this_file)
     except FileNotFoundError:
