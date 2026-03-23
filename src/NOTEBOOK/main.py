@@ -68,7 +68,7 @@ def derive_key(password: str, salt: bytes):
 #Define a function to decrypt a specific file.
 def decrypt(file_name, password):
 
-    with open(f"{file_name}", "rb") as f:
+    with open(file_name, "rb") as f:
         file_data = f.read()
 
     salt = file_data[:16]
@@ -114,9 +114,8 @@ def write2(file_name):
 
 #Define a function to delete a specific file.
 def delete(file_name):
-    delete_this_file = f"{file_name}"
     try:
-        os.remove(delete_this_file)
+        os.remove(file_name)
     except FileNotFoundError:
         print("\nFile not found...\n")
 
