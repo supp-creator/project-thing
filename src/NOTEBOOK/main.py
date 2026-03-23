@@ -10,13 +10,13 @@ from cryptography.hazmat.primitives import hashes
 
 
 #Declaration of global variables
-command_menu = "testing..." #Type in list of commands.
 folder = Path("NOTEBOOK")
 security = "locked"
 
 ##########################################
 #Function Definitions
 ##########################################
+
 
 #Function to create a new file; must check if it exists first.
 def new_file(file_name):
@@ -54,7 +54,7 @@ def open_file(file_name):
     except FileNotFoundError:
         print("File does not exists...")
 
-
+        
 def derive_key(password: str, salt: bytes):
     kdf = PBKDF2HMAC(
         algorithm = hashes.SHA256(),
@@ -106,7 +106,7 @@ def write2(file_name):
         try:
             with open(f"{file_name}.txt", "a") as f:
 
-                print(r"Add something. (If you want a new line, append a '\n' at the end")
+                print(r"Add something.")
                 add_this = input()
                 f.write(f"\n{add_this}")
         except FileNotFoundError:
@@ -155,7 +155,7 @@ def main():
         delete(args.delete)
         print("\nFile successfully deleted...\n")
     else:
-        print(command_menu)
+        return 0
 
 if __name__== "__main__":
     main()
