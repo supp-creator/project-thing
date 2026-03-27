@@ -1,4 +1,0 @@
-
-If you see this, the program works.\n Does this work?
-"\n"The password is 'OPPA'.
-blah blah
