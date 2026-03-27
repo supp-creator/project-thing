@@ -2,6 +2,7 @@ import argparse
 import base64
 import cryptography
 import os
+import getpass
 from pathlib import Path
 
 from cryptography.fernet import Fernet
@@ -23,15 +24,15 @@ def new_file(file_name):
     try:
         with open(f"{file_name}.txt", "x") as f:
             pass
-        print(f"\nFile: {file_name}.txt has been successfully created.\n")
+        print(f"\n{file_name}.txt has been successfully created.\n")
     except FileExistsError:
-        print("File name already taken...Pick a new one...")
+        print("\nFile name already taken.\n")
         return 0
 
 #Define a function to encrypt a specific file.
 def encrypt(file_name):
 
-    password = input()
+    password = getpass.getpass("\nEnter Password: ")
 
     salt = os.urandom(16)
     key = derive_key(password, salt)
@@ -52,8 +53,7 @@ def open_file(file_name):
             contents = f.read()
             print(contents)
     except FileNotFoundError:
-        print("File does not exists...")
-
+        return 0
         
 def derive_key(password: str, salt: bytes):
     kdf = PBKDF2HMAC(
@@ -82,26 +82,31 @@ def decrypt(file_name, password):
         return decrypted.decode()
     
     except:
-        print("Incorrect Password.")
+        print("\nIncorrect Password.\n")
         return None
 
 #Define a function that prompts user for password and decrypts the chosen file.
 #Function must use decrpyt() function
 def unlock(file_name):
-    password = input()
+    try:
+        password = getpass.getpass("\nEnter Password: ")
 
-    decrypted = decrypt(file_name, password)
-    if decrypted is not None:
-        global security
-        security = "unlocked"
+        decrypted = decrypt(file_name, password)
+        
+        if decrypted is not None:
+            global security
+            security = "unlocked"
 
-        return decrypted
-    else:
-        return None
+            return decrypted
+        else:
+            return None
+
+    except FileNotFoundError:
+        print("\nFile Not Found...\n")
 
 def write2(file_name):
     if security == "locked":
-        print("Can't write to this file...Unlock it first...")
+        print("\nCan't write to this file. Unlock it first.\n")
     else:
         try:
             with open(f"{file_name}.txt", "a") as f:
@@ -110,12 +115,13 @@ def write2(file_name):
                 add_this = input()
                 f.write(f"\n{add_this}")
         except FileNotFoundError:
-            print(f"The file: {file_name} doesn't exist.")
+            print(f"\n{file_name} doesn't exist.\n")
 
 #Define a function to delete a specific file.
 def delete(file_name):
     try:
         os.remove(file_name)
+        print("\nFile successfully deleted.\n")
     except FileNotFoundError:
         print("\nFile not found...\n")
 
@@ -139,21 +145,17 @@ def main():
     #Decision Tree
     if args.new:
         new_file(args.new)
-        print("\nEnter Password for this file:\n")
         encrypt(args.new)
     elif args.write:
-        print("Enter Password:")
         unlock(args.write)
         global security
         security = "unlocked"
         write2(args.write)
     elif args.open:
-        print("Enter Password:")
         unlock(args.open)
         open_file(args.open)
     elif args.delete:
         delete(args.delete)
-        print("\nFile successfully deleted...\n")
     else:
         return 0
 
