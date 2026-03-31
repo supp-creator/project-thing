@@ -95,7 +95,7 @@ def unlock(file_name):
         
 def write2(file_name, decrypted_contents, password):
     #Takes new input and appends it to old contents
-    print("\nAdd something.\n")
+    print("\nAdd Text\n")
     add_this = input()
     new_contents = decrypted_contents + f"\n{add_this}"
 
