@@ -113,7 +113,7 @@ def write2(file_name, decrypted_contents, password):
 def delete(file_name):
     try:
         os.remove(f"{folder}/{file_name}.txt")
-        print("\nFile successfully deleted.\n")
+        print(f"\n{file_name}.txt successfully deleted.\n") 
     except FileNotFoundError:
         print(f"\n{file_name} not found.\n")
         sys.exit(0)
@@ -134,7 +134,7 @@ def main():
 
     args = parser.parse_args()
 
-    #Decision Tree
+   # Decision Tree
     if args.new:
         new_file(args.new)
         encrypt(args.new)
