@@ -125,10 +125,10 @@ def delete(file_name):
 
 def rename(file_name):
     if os.path.isfile(f"{folder}/{file_name}.txt"):
-        print("\nRename file to: ")
+        print("\nRename file to: \n")
         new_name = input()
         if os.path.isfile(f"{folder}/{new_name}.txt"):
-            print("File name already take.")
+            print("\nFile name already take.\n")
             print("Overwrite anyways? [yes or no]\n")
             choice = input()
             if choice == "yes":
@@ -137,7 +137,8 @@ def rename(file_name):
             elif choice == "no":
                 print("\nOk\n")
             else:
-                print("Type in 'yes' or 'no' only\n")
+                print("\nType in 'yes' or 'no' only\n")
+                rename(file_name)
         else:
             os.rename(f"{folder}/{file_name}.txt", f"{folder}/{new_name}.txt")
             print(f"\n{file_name}.txt successfully renamed to {new_name}.txt\n")
