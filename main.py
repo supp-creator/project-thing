@@ -1,7 +1,6 @@
 import argparse
 import base64
 import os
-
 import sys
 import getpass
 
@@ -13,6 +12,7 @@ from cryptography.hazmat.primitives import hashes
 
 
 folder = Path(".NOTEBOOK")
+
 ##########################################
 #Function Definitions
 ##########################################
@@ -31,7 +31,9 @@ def encrypt(file_name):
     password = getpass.getpass("\nEnter Password: ")
 
     salt = os.urandom(16)
+
     key = derive_key(password, salt)
+
     fernet = Fernet(key)
 
     with open(f"{folder}/{file_name}.txt", "rb") as f:
@@ -118,6 +120,27 @@ def delete(file_name):
         print(f"\n{file_name} not found.\n")
         sys.exit(0)
 
+def rename(file_name):
+    if os.path.isfile(f"{folder}/{file_name}.txt"):
+        print("Rename file to: ")
+        new_name = input()
+        if os.path.isfile(f"{folder}/{new_name}.txt"):
+            print("File name already take.")
+            print("Overwrite anyways? [yes or no]\n")
+            choice = input()
+            if choice == "yes":
+                os.rename(f"{folder}/{file_name}.txt", f"{folder}/{new_name}.txt")
+                print(f"\n{file_name}.txt successfully renamed to {new_name}.txt\n")
+            elif choice == "no":
+                print("\nOk\n")
+            else:
+                print("Type in 'yes' or 'no' only\n")
+        else:
+            os.rename(f"{folder}/{file_name}.txt", f"{folder}/{new_name}.txt")
+            print(f"{file_name}.txt successfully renamed to {new_name}.txt\n")
+    else: 
+        print(f"\n{file_name}.txt not found.\n")
+    
 def main():
     #Ensures folder where notes ends up in exists.
     folder.mkdir(exist_ok=True)
@@ -130,6 +153,7 @@ def main():
     group.add_argument("--new")
     group.add_argument("--open")
     group.add_argument("--write")
+    group.add_argument("--rename")
     group.add_argument("--delete")
 
     args = parser.parse_args()
@@ -146,6 +170,8 @@ def main():
         print(f"\n{decrypted_contents}\n")
     elif args.delete:
         delete(args.delete)
+    elif args.rename:
+        rename(args.rename)
     else:
         return 0
 
