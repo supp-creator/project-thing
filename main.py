@@ -30,10 +30,13 @@ def encrypt(file_name):
 
     password = getpass.getpass("\nEnter Password: ")
 
+    #Generates salt randomly
     salt = os.urandom(16)
 
+    #Uses password and salt to create encryption key
     key = derive_key(password, salt)
-
+    
+    #Uses Fernet function from module to make key
     fernet = Fernet(key)
 
     with open(f"{folder}/{file_name}.txt", "rb") as f:
@@ -45,7 +48,7 @@ def encrypt(file_name):
         f.write(salt + encrypted)
 
 
-def derive_key(password: str, salt: bytes):
+def derive_key(password, salt):
     kdf = PBKDF2HMAC(
         algorithm = hashes.SHA256(),
         length = 32,
@@ -122,7 +125,7 @@ def delete(file_name):
 
 def rename(file_name):
     if os.path.isfile(f"{folder}/{file_name}.txt"):
-        print("Rename file to: ")
+        print("\nRename file to: ")
         new_name = input()
         if os.path.isfile(f"{folder}/{new_name}.txt"):
             print("File name already take.")
@@ -137,7 +140,7 @@ def rename(file_name):
                 print("Type in 'yes' or 'no' only\n")
         else:
             os.rename(f"{folder}/{file_name}.txt", f"{folder}/{new_name}.txt")
-            print(f"{file_name}.txt successfully renamed to {new_name}.txt\n")
+            print(f"\n{file_name}.txt successfully renamed to {new_name}.txt\n")
     else: 
         print(f"\n{file_name}.txt not found.\n")
     
