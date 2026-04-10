@@ -128,7 +128,7 @@ def rename(file_name):
         print("\nRename file to: \n")
         new_name = input()
         if os.path.isfile(f"{folder}/{new_name}.txt"):
-            print("\nFile name already take.\n")
+            print("\nFile name already taken.\n")
             print("Overwrite anyways? [yes or no]\n")
             choice = input()
             if choice == "yes":
